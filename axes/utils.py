@@ -251,8 +251,8 @@ def get_login_form(request):
     # setting a clearly fake password means that we
     # show the 'invalid username/password' match on the login template
     fake_data = {
-        'username': request.POST['username'],
-        'password': request.POST['password'] + 'nopenopenope' # guarantees that the password won't match
+        'username': request.POST.get('username', ''),
+        'password': request.POST.get('password', '') + 'nopenopenope' # guarantees that the password won't match
     }
     login_form = klass(data=fake_data)
 
