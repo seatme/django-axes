@@ -13,13 +13,6 @@ from django.utils import timezone as datetime
 from django.utils.translation import ugettext_lazy
 
 try:
-    from django.contrib.auth import get_user_model
-except ImportError:  # django < 1.5
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
-
-try:
     from django.contrib.auth.models import SiteProfileNotAvailable
 except ImportError:  # django >= 1.7
     SiteProfileNotAvailable = type('SiteProfileNotAvailable', (Exception,), {})
@@ -138,6 +131,15 @@ def is_user_lockable(request):
     If so, then return the value to see if this user is special
     and doesn't get their account locked out
     """
+    # Import the User model here, since get_user_model cannot be used in code
+    # that is executed at import time in Django 1.7 (it only works once all
+    # models are loaded)
+    try:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+    except ImportError:  # django < 1.5
+        from django.contrib.auth.models import User
+
     try:
         field = getattr(User, 'USERNAME_FIELD', 'username')
         kwargs = {
