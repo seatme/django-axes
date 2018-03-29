@@ -1,25 +1,30 @@
 from django.db import models
+from django.utils import six
 
 
 class CommonAccess(models.Model):
     user_agent = models.CharField(
         max_length=255,
+        db_index=True,
     )
 
-    ip_address = models.IPAddressField(
+    ip_address = models.GenericIPAddressField(
         verbose_name='IP Address',
         null=True,
+        db_index=True,
     )
 
     username = models.CharField(
         max_length=255,
         null=True,
+        db_index=True,
     )
 
     # Once a user logs in from an ip, that combination is trusted and not
     # locked out in case of a distributed attack
     trusted = models.BooleanField(
         default=False,
+        db_index=True,
     )
 
     http_accept = models.CharField(
@@ -37,6 +42,7 @@ class CommonAccess(models.Model):
     )
 
     class Meta:
+        app_label = 'axes'
         abstract = True
         ordering = ['-attempt_time']
 
@@ -59,7 +65,7 @@ class AccessAttempt(CommonAccess):
         return self.failures_since_start
 
     def __unicode__(self):
-        return u'Attempted Access: %s' % self.attempt_time
+        return six.u('Attempted Access: %s') % self.attempt_time
 
 
 class AccessLog(CommonAccess):
@@ -69,4 +75,6 @@ class AccessLog(CommonAccess):
     )
 
     def __unicode__(self):
-        return u'Access Log for %s @ %s' % (self.username, self.attempt_time)
+        return six.u('Access Log for %s @ %s') % (
+            self.username, self.attempt_time
+        )
