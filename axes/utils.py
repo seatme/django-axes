@@ -7,7 +7,6 @@ from socket import inet_pton, AF_INET6, error
 from django.conf import settings
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import SiteProfileNotAvailable
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -105,6 +104,16 @@ def log_decorated_call(func, args=None, kwargs=None):
         log.info('args: %s' % str(args))
     if kwargs:
         log.info('kwargs: %s' % kwargs)
+
+def create_access_log(request, login_unsuccessful):
+    AccessLog.objects.create(
+        user_agent=request.META.get('HTTP_USER_AGENT', '<unknown>')[:255],
+        ip_address=get_ip(request),
+        username=request.POST.get('username', None),
+        http_accept=request.META.get('HTTP_ACCEPT', '<unknown>'),
+        path_info=request.META.get('PATH_INFO', '<unknown>'),
+        trusted=not login_unsuccessful,
+    )
 
 def reset(ip=None, username=None):
     """Reset records that match ip or username, and

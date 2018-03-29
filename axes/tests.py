@@ -18,16 +18,12 @@ from django.test.client import RequestFactory
 from axes.settings import FAILURE_LIMIT
 from axes.models import AccessAttempt, AccessLog
 from axes.signals import user_locked_out
-from axes.utils import reset, iso8601, get_client_str, get_ip, get_cache_key
+from axes.utils import reset, iso8601, get_client_str, get_ip, get_cache_key, LOGIN_FORM_KEY
 
 
 TEST_COOLOFF_TIME = datetime.timedelta(seconds=2)
 
-from axes.utils import COOLOFF_TIME
-from axes.utils import FAILURE_LIMIT
-from axes.utils import LOGIN_FORM_KEY
 from axes.models import AccessLog
-from axes.utils import reset
 
 class MockRequest:
     def __init__(self):
