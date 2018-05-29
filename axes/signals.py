@@ -22,7 +22,7 @@ if not DISABLE_ACCESS_LOG:
         access_logs = AccessLog.objects.filter(
             username=user.get_username(),
             logout_time__isnull=True,
-        ).order_by('-attempt_time')[0:1]
+        ).order_by('-attempt_time')
 
         if access_logs:
             access_log = access_logs[0]
