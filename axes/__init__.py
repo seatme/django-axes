@@ -1,9 +1,6 @@
-try:
-    __version__ = __import__('pkg_resources').get_distribution(
-        'django-axes'
-    ).version
-except:
-    __version__ = ''
+__version__ = '2.3.3'
+
+default_app_config = 'axes.apps.AppConfig'
 
 
 def get_version():

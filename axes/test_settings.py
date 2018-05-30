@@ -1,15 +1,9 @@
-import os
-import django
-
-if django.VERSION[:2] >= (1, 3):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
     }
-else:
-    DATABASE_ENGINE = 'sqlite3'
+}
 
 SITE_ID = 1
 
@@ -17,12 +11,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'axes.middleware.FailedLoginMiddleware'
 )
 
 ROOT_URLCONF = 'axes.test_urls'
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -30,14 +23,33 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.admin',
 
-    'axes',
+    'axes.apps.AppConfig',
+)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 SECRET_KEY = 'too-secret-for-test'
 
-LOGIN_REDIRECT_URL = '/admin'
+USE_I18N = False
+
+USE_L10N = False
+
+USE_TZ = False
+
+LOGIN_REDIRECT_URL = '/admin/'
 
 AXES_LOGIN_FAILURE_LIMIT = 10
-from datetime import timedelta
-AXES_COOLOFF_TIME=timedelta(seconds = 2)
-

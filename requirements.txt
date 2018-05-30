@@ -1,0 +1,4 @@
+Django
+sphinx-rtd-theme
+mock
+-e .

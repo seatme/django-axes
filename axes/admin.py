@@ -16,7 +16,6 @@ class AccessAttemptAdmin(admin.ModelAdmin):
 
     list_filter = [
         'attempt_time',
-        'ip_address',
         'username',
         'path_info',
     ]
@@ -42,6 +41,22 @@ class AccessAttemptAdmin(admin.ModelAdmin):
         })
     )
 
+    readonly_fields = [
+        'user_agent',
+        'ip_address',
+        'username',
+        'trusted',
+        'http_accept',
+        'path_info',
+        'attempt_time',
+        'get_data',
+        'post_data',
+        'failures_since_start'
+    ]
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
 admin.site.register(AccessAttempt, AccessAttemptAdmin)
 
 
@@ -58,7 +73,6 @@ class AccessLogAdmin(admin.ModelAdmin):
     list_filter = [
         'attempt_time',
         'logout_time',
-        'ip_address',
         'username',
         'path_info',
     ]
@@ -80,5 +94,19 @@ class AccessLogAdmin(admin.ModelAdmin):
             'fields': ('user_agent', 'ip_address', 'http_accept')
         })
     )
+
+    readonly_fields = [
+        'user_agent',
+        'ip_address',
+        'username',
+        'trusted',
+        'http_accept',
+        'path_info',
+        'attempt_time',
+        'logout_time'
+    ]
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 admin.site.register(AccessLog, AccessLogAdmin)
